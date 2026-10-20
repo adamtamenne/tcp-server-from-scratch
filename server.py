@@ -24,8 +24,17 @@ print(f"Server listening on {HOST}:{PORT}")
 # a tuple like ("127.0.0.1", 52431) with the clients IP and their ephemeral port (a random high port the OS assigned them)
 client_socket, address = server.accept()
 
-# Logs who connected
+# logs who connected
 print(f"Connection from {address[0]}:{address[1]}")
+
+# instead of reading once and quitting, the server now loops forever
+# client calls close(), the OS sends a FIN packet. On the server side, recv() returns b"" empty bytes which is falsy in Python 
+# that is your signal that the client hung up. Without this check, the loop would spin forever on empty reads
+while True:                                
+    data = client_socket.recv(1024)
+    if not data:
+        break
+    print(f"address[0]: {data.decode('utf-8')}")
 
 # reads up to 1024 bytes from the client. recv() returns raw bytes, 1024 is buffer size, blocks until data arrives
 data = client_socket.recv(1024)
