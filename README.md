@@ -14,3 +14,6 @@ Connects to the server, sends one message, and exits. Covers `connect()`, `senda
 
 ### Step 3: Persistent connections (`server.py`, `client.py`)
 Added `while True` loops so the connection stays alive for multiple messages. Server detects client disconnect via empty `recv()` (TCP FIN). Client catches `ConnectionRefusedError` and supports graceful exit with `quit`.
+
+### Step 4: Threading and multi-client broadcast (`server.py`)
+Server now accepts multiple clients concurrently using `threading.Thread`. Each client gets its own thread running a `handle_client` function. Messages are broadcast to all other connected clients via a shared `clients` list. Cleanup removes disconnected sockets from the list.
