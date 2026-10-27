@@ -17,3 +17,6 @@ Added `while True` loops so the connection stays alive for multiple messages. Se
 
 ### Step 4: Threading and multi-client broadcast (`server.py`)
 Server now accepts multiple clients concurrently using `threading.Thread`. Each client gets its own thread running a `handle_client` function. Messages are broadcast to all other connected clients via a shared `clients` list. Cleanup removes disconnected sockets from the list.
+
+### Step 5: Client recv thread (`client.py`)
+Client now runs a background daemon thread for receiving messages while the main thread handles input. Supports `quit` to disconnect cleanly. Completes the two-way multi-client chat.
